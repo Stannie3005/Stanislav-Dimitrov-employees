@@ -1,9 +1,9 @@
 function findOverlap(employee1, employee2) { //take two periods of time and find how many days overlap
     //if value isn't a real date, the calculations will simply not work and it'll get skipped
-    start1 = new Date(employee1.DateFrom);
-    end1 = employee1.DateTo === "NULL" ? new Date() : new Date(employee1.DateTo);
-    start2 = new Date(employee2.DateFrom);
-    end2 = employee2.DateTo === "NULL" ? new Date() : new Date(employee2.DateTo);
+    const start1 = new Date(employee1.DateFrom);
+    const end1 = employee1.DateTo === "NULL" ? new Date() : new Date(employee1.DateTo);
+    const start2 = new Date(employee2.DateFrom);
+    const end2 = employee2.DateTo === "NULL" ? new Date() : new Date(employee2.DateTo);
 
     if (start1 >= end2 || end1 <= start2) { //check if there even is overlap
         return 0;
@@ -63,19 +63,19 @@ function appendData(pair, projects) {
     table.append(headers);
 
     for (let i = 0; i < projects.length; i++) {
-        let row = document.createElement("tr");
+        const row = document.createElement("tr");
 
-        emp1 = document.createElement("th");
+        let emp1 = document.createElement("th");
         emp1.innerText = pair.EmpID1;
         row.append(emp1);
-        emp2 = document.createElement("th");
+        let emp2 = document.createElement("th");
         emp2.innerText = pair.EmpID2;
         row.append(emp2);
 
-        proj = document.createElement("th");
+        let proj = document.createElement("th");
         proj.innerText = projects[i].ProjectID;
         row.append(proj);
-        days = document.createElement("th");
+        let days = document.createElement("th");
         days.innerText = projects[i].DaysWorked;
         row.append(days);
 
@@ -119,7 +119,7 @@ function findPair(input) {
             for (let k = 0; k < employees[i].Projects.length; k++) {//checking each project of every employee
                 for (let l = 0; l < employees[j].Projects.length; l++) {//and if any of them match any of the projects of the paired employee
                     if (employees[i].Projects[k].ProjectID === employees[j].Projects[l].ProjectID) {
-                        overlap = findOverlap(employees[i].Projects[k], employees[j].Projects[l]);
+                        const overlap = findOverlap(employees[i].Projects[k], employees[j].Projects[l]);
                         currentTotalDuration += overlap;
                         currentProjects.push({ProjectID: employees[i].Projects[k].ProjectID, DaysWorked: overlap});                        
                     }
