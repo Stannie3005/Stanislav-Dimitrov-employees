@@ -34,7 +34,53 @@ function toEmployeeCentered(employees) {
     return result;
 }
 
+function appendData(pair, projects) {
+    let table = document.createElement("table");
+    table.classList = "tbl";
+
+    let headers = document.createElement("tr");
+
+    let header1 = document.createElement("th");
+    header1.innerText = "Employee ID #1";
+    headers.append(header1);
+    let header2 = document.createElement("th");
+    header2.innerText = "Employee ID #2";
+    headers.append(header2);
+    let header3 = document.createElement("th");
+    header3.innerText = "Project ID";
+    headers.append(header3);
+    let header4 = document.createElement("th");
+    header4.innerText = "Days worked";
+    headers.append(header4);
+
+    table.append(headers);
+
+    for (let i = 0; i < projects.length; i++) {
+        let row = document.createElement("tr");
+
+        emp1 = document.createElement("th");
+        emp1.innerText = pair.EmpID1;
+        row.append(emp1);
+        emp2 = document.createElement("th");
+        emp2.innerText = pair.EmpID2;
+        row.append(emp2);
+
+        proj = document.createElement("th");
+        proj.innerText = projects[i].ProjectID;
+        row.append(proj);
+        days = document.createElement("th");
+        days.innerText = projects[i].DaysWorked;
+        row.append(days);
+
+        table.append(row);
+    }
+
+    document.querySelector(".container").append(table);
+}
+
 function findPair(input) {
+    document.querySelector("table").remove();
+
     const employeesInitial = input.data;
     console.log(employeesInitial);
 
@@ -71,7 +117,7 @@ function findPair(input) {
             if (totalDuration < currentTotalDuration) {
                 totalDuration = currentTotalDuration;
                 projects = currentProjects;
-                pair = {EmpID1: employees[i].EmpID, EmpID: employees[j].EmpID};
+                pair = {EmpID1: employees[i].EmpID, EmpID2: employees[j].EmpID};
             }
         }
     }
@@ -81,12 +127,12 @@ function findPair(input) {
     console.log("for a whopping " + totalDuration + " days! (don't quote me on that)");
     console.log(projects);
     
+    appendData(pair, projects);
 }
 
 const uploadconfirm = document.getElementById("uploadconfirm").
 addEventListener("click", () => {
     if (document.getElementById("uploadfile").files[0] === undefined) {
-        //MAKE AN ERROR MESSAGE WHEN YOU CAN
         return;
     }
     Papa.parse(document.getElementById("uploadfile").files[0],

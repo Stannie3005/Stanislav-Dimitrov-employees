@@ -6,9 +6,19 @@
     <title>Employees</title>
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js" defer></script>
     <script src="script.js" defer></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="stylesheet.css">
 </head>
 <body>
-    <input type="file" id="uploadfile" accept=".csv">
-    <button id="uploadconfirm">Find the pair that's worked the longest</button>
+    <div class="container">
+        <div>
+            <input type="file" id="uploadfile" accept=".csv">
+            <button id="uploadconfirm">Find the pair that's worked the longest</button>
+        </div>
+        <table>
+        </table>
+    </div>
 </body>
 </html>
