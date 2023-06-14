@@ -90,12 +90,14 @@ convert it to a friendlier structure for this algorithm
 which then gets parsed, effectively checking every possible pair of employees
 and seeing which pair has the largest number of days they both worked at the same time on mutual projects*/
 function findPair(input) {
+    if (input.data.length <= 1) { //catches if the user uploaded an empty csv file or a file with only one
+        alert("You need at least two records in the CSV file. Please review the contents of the file.");
+        return;
+    }
+
     const employeesInitial = input.data;
-    console.log(employeesInitial);
 
     let employees = toEmployeeCentered(employeesInitial);
-    console.log("employees: ");//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~REMOVE LATER~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    console.log(employees);//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~REMOVE LATER~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     //pair with longest total time spent on a project together
     //EXAMPLE {EmpID1: 203, EmpID2: 392}
@@ -132,11 +134,6 @@ function findPair(input) {
             }
         }
     }
-
-    console.log("so guy. the pair that has worked the most on projects are those two:");//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~REMOVE LATER~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    console.log(pair);//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~REMOVE LATER~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    console.log("for a whopping " + totalDuration + " days! (don't quote me on that)");//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~REMOVE LATER~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    console.log(projects);//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~REMOVE LATER~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
     document.querySelector("table").remove();//removing the existing table if a user had already run this before
     appendData(pair, projects);
