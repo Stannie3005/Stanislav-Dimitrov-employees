@@ -1,13 +1,17 @@
 function findOverlap(employee1, employee2) { //take two periods of time and find how many days overlap
+    //if value isn't a real date, the calculations will simply not work and it'll get skipped
     start1 = new Date(employee1.DateFrom);
     end1 = employee1.DateTo === "NULL" ? new Date() : new Date(employee1.DateTo);
     start2 = new Date(employee2.DateFrom);
     end2 = employee2.DateTo === "NULL" ? new Date() : new Date(employee2.DateTo);
+
     if (start1 >= end2 || end1 <= start2) { //check if there even is overlap
         return 0;
     }
 
     const MILLISECONDS_IN_A_DAY = 86400000;
+
+    //finding the period of time where the two dates overlap
     const overlapStart = start1 < start2 ? start2 : start1;
     const overlapEnd = end1 < end2 ? end1 : end2;
     const overlapDurationDays = Math.ceil((overlapEnd - overlapStart) / MILLISECONDS_IN_A_DAY);
@@ -15,6 +19,8 @@ function findOverlap(employee1, employee2) { //take two periods of time and find
     return overlapDurationDays;
 }
 
+/*function to convert the data we read from the file so that employee IDs dont repeat 
+and we have information about projects for each employee*/
 function toEmployeeCentered(employees) {
     let uniqueEmployees = [];
     let projects = [];
@@ -34,6 +40,7 @@ function toEmployeeCentered(employees) {
     return result;
 }
 
+//function to create the datagrid with needed information and append it to the page
 function appendData(pair, projects) {
     let table = document.createElement("table");
     table.classList = "tbl";
@@ -78,18 +85,20 @@ function appendData(pair, projects) {
     document.querySelector(".container").append(table);
 }
 
+/*function to take the information we parsed from the csv file,
+convert it to a friendlier structure for this algorithm
+which then gets parsed, effectively checking every possible pair of employees
+and seeing which pair has the largest number of days they both worked at the same time on mutual projects*/
 function findPair(input) {
-    document.querySelector("table").remove();
-
     const employeesInitial = input.data;
     console.log(employeesInitial);
 
     let employees = toEmployeeCentered(employeesInitial);
-    console.log("employees: ");
-    console.log(employees);
+    console.log("employees: ");//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~REMOVE LATER~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    console.log(employees);//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~REMOVE LATER~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     //pair with longest total time spent on a project together
-    //EXAMPLE {EmployeeID1: 203, EmployeeID2: 392}
+    //EXAMPLE {EmpID1: 203, EmpID2: 392}
     let pair = {};
 
     //every project shared by the pair and the time they've been together on it
@@ -101,6 +110,7 @@ function findPair(input) {
     
     for (let i = 0; i < employees.length - 1; i++) {//looking through our list of employees
         for (let j = i + 1; j < employees.length; j++) {//looking through the list again so we could pair up everyone. every iteration is practically a new pair of employees
+            //temporary variables
             let currentProjects = [];
             let currentTotalDuration = 0;
 
@@ -113,7 +123,8 @@ function findPair(input) {
                     }
                 }
             }
-
+            
+            //if the current pair has worked together more days than the current max, they become the official winners for now
             if (totalDuration < currentTotalDuration) {
                 totalDuration = currentTotalDuration;
                 projects = currentProjects;
@@ -122,17 +133,18 @@ function findPair(input) {
         }
     }
 
-    console.log("so guy. the pair that has worked the most on projects are those two:");
-    console.log(pair);
-    console.log("for a whopping " + totalDuration + " days! (don't quote me on that)");
-    console.log(projects);
+    console.log("so guy. the pair that has worked the most on projects are those two:");//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~REMOVE LATER~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    console.log(pair);//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~REMOVE LATER~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    console.log("for a whopping " + totalDuration + " days! (don't quote me on that)");//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~REMOVE LATER~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    console.log(projects);//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~REMOVE LATER~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
+    document.querySelector("table").remove();//removing the existing table if a user had already run this before
     appendData(pair, projects);
 }
 
 const uploadconfirm = document.getElementById("uploadconfirm").
 addEventListener("click", () => {
-    if (document.getElementById("uploadfile").files[0] === undefined) {
+    if (document.getElementById("uploadfile").files[0] === undefined) { //using PapaParse 5.4.1 to parse the CSV file into an array of objects
         return;
     }
     Papa.parse(document.getElementById("uploadfile").files[0],
@@ -140,7 +152,7 @@ addEventListener("click", () => {
         download: true,
         header: true,
         skipEmptyLines: true,
-        complete: function(results) {//EXAMPLE LINE {EmpID: '143', ProjectID: '12', DateFrom: '2021-04-08', DateTo: '2021-12-13'}
+        complete: function(results) {//EXAMPLE OBJECT IN THE ARRAY {EmpID: '143', ProjectID: '12', DateFrom: '2021-04-08', DateTo: '2021-12-13'}
             findPair(results);
         }
     });
